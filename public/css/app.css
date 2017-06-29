@@ -7,9 +7,18 @@ textarea, select, input {
 }
 
 .slider.slider-horizontal{
-  width: 260px;
+  width: 375px;
+  margin-left:13px;
+
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */   
 }
 
+.navbar-brand {
+  width: 140px;
+}
 /* Sticky footer styles
 -------------------------------------------------- */
 html {

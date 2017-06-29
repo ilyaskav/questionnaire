@@ -17,27 +17,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (request, response) {
   var locals = {
-    title: 'Page Title'
+    title: 'Brandply questionnaire'
   };
   response.render('index', locals);
 });
 
-app.get ('/form', function(request, response){
-  var locals={
-    title: 'Questionnaire'
+app.get('/form', function (request, response) {
+  var locals = {
+    title: 'Brandply questionnaire: answer the questions'
   };
   response.render('form', locals);
 });
 
-app.post ('/submitForm', function(req, res){
-  
+app.post('/submitForm', function (req, res) {
+
   req.checkBody('codeQuality', 'Invalid code quality value').notEmpty().isInt();
   req.checkBody('bestDev', 'Invalid best dev value').notEmpty().isInt();
   req.checkBody('suggestions', 'Suggestions should not be empty').notEmpty();
   req.checkBody('lengthOfSprint', 'Invalid length Of Sprint value').notEmpty().isInt();
   req.checkBody('name', 'Name is required').notEmpty();
-  
-  req.getValidationResult().then(function(result) {
+
+  req.getValidationResult().then(function (result) {
     if (!result.isEmpty()) {
       res.status(400).send('There have been validation errors: ' + util.inspect(result.array()));
       return;
@@ -48,6 +48,13 @@ app.post ('/submitForm', function(req, res){
       postparam: req.body.postparam
     });
   });
+});
+
+app.get ('/results', function(req, res){
+  var locals = {
+    title: 'Brandply questionnaire: results'
+  };
+  res.render('results', locals);
 });
 
 var port = 8080;

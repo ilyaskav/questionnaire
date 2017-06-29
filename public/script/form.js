@@ -1,22 +1,20 @@
 $(document).ready(function () {
-    var slider = new Slider("#codeQuality");
-    slider.on("slide", function (sliderValue) {
-        document.getElementById("codeQualitySliderVal").textContent = sliderValue;
-    });
+    $('#navbar li').eq(1).addClass('active');
 
-    $('#questionnaireForm').on('submit', function(e){
+    $('#questionnaireForm').on('submit', function (e) {
         e.preventDefault();
         var form = $('#questionnaireForm');
         var formData = form.serialize();
-        
-        $.post ('/submitForm', formData, 'json')
-            .done(function(){
-                $('.alert').show();
+
+        $.post('/submitForm', formData, 'json')
+            .done(function () {
+                $('.alert-success').show();
                 form[0].reset();
-                console.log('request has been successfully sent')
+                console.log('Request has been successfully sent')
             })
-            .fail(function(){
-                console.log('Error sending the form')                
+            .fail(function () {
+                $('.alert-danger').show();
+                console.log('Error sending the form')
             });
     });
 });
