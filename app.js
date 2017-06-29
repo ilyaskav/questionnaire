@@ -1,13 +1,18 @@
 var express = require('express');
 var engine = require('ejs-locals');
 var path = require('path');
-//var routes = require('./routes/index');
+var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
+var util = require('util');
 
 var app = express();
 
 app.set('views', path.join(__dirname, 'public/views'));
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
+// middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator()); // this line must be immediately after any of the bodyParser middlewares! 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (request, response) {
@@ -15,6 +20,34 @@ app.get('/', function (request, response) {
     title: 'Page Title'
   };
   response.render('index', locals);
+});
+
+app.get ('/form', function(request, response){
+  var locals={
+    title: 'Questionnaire'
+  };
+  response.render('form', locals);
+});
+
+app.post ('/submitForm', function(req, res){
+  
+  req.checkBody('codeQuality', 'Invalid code quality value').notEmpty().isInt();
+  req.checkBody('bestDev', 'Invalid best dev value').notEmpty().isInt();
+  req.checkBody('suggestions', 'Suggestions should not be empty').notEmpty();
+  req.checkBody('lengthOfSprint', 'Invalid length Of Sprint value').notEmpty().isInt();
+  req.checkBody('name', 'Name is required').notEmpty();
+  
+  req.getValidationResult().then(function(result) {
+    if (!result.isEmpty()) {
+      res.status(400).send('There have been validation errors: ' + util.inspect(result.array()));
+      return;
+    }
+    res.json({
+      urlparam: req.params.urlparam,
+      getparam: req.query.getparam,
+      postparam: req.body.postparam
+    });
+  });
 });
 
 var port = 8080;

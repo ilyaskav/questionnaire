@@ -1,0 +1,42 @@
+<% layout('../layout') -%>
+<% script('../script/form.js') -%>
+<% stylesheet('../css/bootstrap-slider.min.css') -%>
+<% stylesheet('../css/app.css') -%>
+
+<h2>BrandPly Questionnaire</h2>
+<form id="questionnaireForm">
+    <div class="form-group">
+        <label for="codeQuality">Code quality</label> <br />
+        <input class="form-control" name="codeQuality" id="codeQuality" type="text" data-slider-min="1" data-slider-max="10" data-slider-step="1"
+            data-slider-value="1" />
+        <span class="text-right">Selected Value: <span id="codeQualitySliderVal">1</span></span>
+    </div>
+
+    <div class="form-group">
+        <label for="bestDev">The best developer</label>
+        <select name="bestDev" id="bestDev" class="form-control" required>
+            <option value="" selected>Select dev</option>
+            <option value="1">Eugene Novikov</option>
+            <option value="2">Nikita Evdokimenko</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="suggestions">Suggestions</label>
+        <textarea name="suggestions" id="suggestions" class="form-control" rows="3" required> </textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="lengthOfSprint"> Length of sprint </label>
+        <input type="number" name="lengthOfSprint" id="lengthOfSprint" class="form-control" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="name">Your name </label>
+        <input type="text" name="name" id="name" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Send</button>
+    </div>
+</form>
