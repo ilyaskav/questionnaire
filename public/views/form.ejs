@@ -1,10 +1,16 @@
 <% layout('../layout') -%>
 <% script('../script/form.js') -%>
+<% script('../script/bootstrap.min.js') -%>
 <% stylesheet('../css/bootstrap-slider.min.css') -%>
 <% stylesheet('../css/app.css') -%>
 
+<div class="alert alert-success alert-dismissible" role="alert" style="display:none;">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+   Thank you for taking the time!
+</div>
+
 <h2>BrandPly Questionnaire</h2>
-<form id="questionnaireForm">
+<form id="questionnaireForm" method="post">
     <div class="form-group">
         <label for="codeQuality">Code quality</label> <br />
         <input class="form-control" name="codeQuality" id="codeQuality" type="text" data-slider-min="1" data-slider-max="10" data-slider-step="1"
