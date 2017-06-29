@@ -4,6 +4,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var util = require('util');
+var fs = require('fs');
 
 var app = express();
 
@@ -42,20 +43,34 @@ app.post('/submitForm', function (req, res) {
       res.status(400).send('There have been validation errors: ' + util.inspect(result.array()));
       return;
     }
-    res.json({
-      urlparam: req.params.urlparam,
-      getparam: req.query.getparam,
-      postparam: req.body.postparam
-    });
+    // res.json({
+    //   urlparam: req.params.urlparam,
+    //   getparam: req.query.getparam,
+    //   postparam: req.body.postparam
+    // });
+    writeAnswer(req.body);
   });
 });
 
-app.get ('/results', function(req, res){
+app.get('/results', function (req, res) {
   var locals = {
     title: 'Brandply questionnaire: results'
   };
   res.render('results', locals);
 });
+
+var writeAnswer = function (data) {
+  fs.open('../data/db.txt', 'wx', (err, fd) => {
+    if (err) {
+      if (err.code === 'EEXIST') {
+        console.error('myfile already exists');
+        return;
+      }
+      throw err;
+    }
+    writeMyData(JSON.stringify(fd));
+  });
+};
 
 var port = 8080;
 app.listen(port);
