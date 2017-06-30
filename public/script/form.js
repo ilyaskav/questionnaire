@@ -1,5 +1,4 @@
 
-
 $(document).ready(function () {
     $('#navbar li').eq(1).addClass('active');
 
@@ -19,6 +18,5 @@ $(document).ready(function () {
                 console.log('Error sending the form')
             });
     });
-
     
 });

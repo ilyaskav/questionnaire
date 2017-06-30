@@ -42,11 +42,7 @@ app.post('/submitForm', function (req, res) {
       res.status(400).send('There have been validation errors: ' + util.inspect(result.array()));
       return;
     }
-    // res.json({
-    //   urlparam: req.params.urlparam,
-    //   getparam: req.query.getparam,
-    //   postparam: req.body.postparam
-    // });
+
     writeAnswer(req.body);
     res.json({
       urlparam: req.params.urlparam,
@@ -96,18 +92,15 @@ var readAnswers = function () {
       fs.readFile(fd, (err, data) => {
         if (err) throw err;
 
-        // console.log(data);
         fs.close(fd);
         var resultArr = [];
 
         var strArray = data.toString().split('`');
-        // console.log(strArray);
 
         for (var i=0; i<strArray.length; i++){
           if (!strArray[i]) continue;
           resultArr.push(JSON.parse(strArray[i]));
         }
-        // console.log(resultArr);
         resolve(resultArr);
       });
     });
