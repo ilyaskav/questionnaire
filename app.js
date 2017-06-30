@@ -1,10 +1,12 @@
 var express = require('express');
 var engine = require('ejs-locals');
 var path = require('path');
+var fs = require('fs');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var util = require('util');
-var fs = require('fs');
+var lib = path.join(path.dirname(fs.realpathSync(__filename)), 'public/script/server');
+var fileIO = require(lib + '/file-io.server.js');
 
 var app = express();
 
@@ -43,70 +45,27 @@ app.post('/submitForm', function (req, res) {
       return;
     }
 
-    writeAnswer(req.body);
-    res.json({
-      urlparam: req.params.urlparam,
-      getparam: req.query.getparam,
-      postparam: req.body.postparam
-    });
+    fileIO.writeObj(req.body).then(
+      function (result) {
+        res.json({result: result});
+      },
+      function (result) {
+        res.status(400).send(result);
+      }
+    );
   });
 });
 
 app.get('/results', function (req, res) {
 
-   readAnswers().then(function(data){
-    res.render('results', {title: 'Brandply questionnaire: results', data: data, error: null});
-   },function(reason) {
-  // отказ
-    res.render('results', {title: 'Brandply questionnaire: results', data: [], error: "No questionnaire answers yet."});
-  }); 
+  fileIO.readObj().then(
+    function (data) {  // успех
+      res.render('results', { title: 'Brandply questionnaire: results', data: data, error: null });
+    },
+    function (reason) { // отказ  
+      res.render('results', { title: 'Brandply questionnaire: results', data: [], error: "No questionnaire answers yet." });
+    });
 });
-
-var writeAnswer = function (data) {
-  fs.open('public/data/db.txt', 'a', (err, fd) => {
-    if (err) {
-      if (err.code === 'EEXIST') {
-        console.error('myfile already exists');
-        return;
-      }
-      throw err;
-    }
-    fs.appendFile(fd, JSON.stringify(data, null)+ '`', (err) => {
-      if (err) throw err;
-      console.log('The "data to append" was appended to file!');
-      fs.close(fd);
-    });
-  });
-};
-
-var readAnswers = function () {
-  var promise = new Promise(function (resolve, reject) {
-
-    fs.open('public/data/db.txt', 'r', (err, fd) => {
-      if (err) {
-        if (err.code === 'ENOENT') {
-          reject('file does not exists');
-        }
-        return;
-      }
-      fs.readFile(fd, (err, data) => {
-        if (err) throw err;
-
-        fs.close(fd);
-        var resultArr = [];
-
-        var strArray = data.toString().split('`');
-
-        for (var i=0; i<strArray.length; i++){
-          if (!strArray[i]) continue;
-          resultArr.push(JSON.parse(strArray[i]));
-        }
-        resolve(resultArr);
-      });
-    });
-  });
-return promise;
-};
 
 
 var port = 8080;

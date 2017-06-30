@@ -22,6 +22,10 @@ p.bg-warning{
 .navbar-brand {
   width: 140px;
 }
+.well>.dl-horizontal{
+  margin: 0;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
