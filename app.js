@@ -59,8 +59,11 @@ app.post('/submitForm', function (req, res) {
 app.get('/results', function (req, res) {
 
    readAnswers().then(function(data){
-    res.render('results', {title: 'Brandply questionnaire: results', data: data});
-   }); 
+    res.render('results', {title: 'Brandply questionnaire: results', data: data, error: null});
+   },function(reason) {
+  // отказ
+    res.render('results', {title: 'Brandply questionnaire: results', data: [], error: "No questionnaire answers yet."});
+  }); 
 });
 
 var writeAnswer = function (data) {
@@ -88,7 +91,7 @@ var readAnswers = function () {
         if (err.code === 'ENOENT') {
           reject('file does not exists');
         }
-        throw err;
+        return;
       }
       fs.readFile(fd, (err, data) => {
         if (err) throw err;
@@ -98,14 +101,13 @@ var readAnswers = function () {
         var resultArr = [];
 
         var strArray = data.toString().split('`');
-        console.log(strArray);
+        // console.log(strArray);
 
         for (var i=0; i<strArray.length; i++){
           if (!strArray[i]) continue;
           resultArr.push(JSON.parse(strArray[i]));
         }
-        // var strArrayJSON = JSON.parse(strArray);
-        console.log(resultArr);
+        // console.log(resultArr);
         resolve(resultArr);
       });
     });

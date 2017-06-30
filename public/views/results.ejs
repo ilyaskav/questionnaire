@@ -3,6 +3,10 @@
 
 <h2>BrandPly Questionnaire results</h2>
 
+<%if (error !=null) { %>
+    <p class="bg-warning"><%= error %></p>
+<% } %>
+
 <% data.forEach(function(answer) { %>
 <div class="well"> 
     

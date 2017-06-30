@@ -16,6 +16,9 @@ textarea, select, input {
     user-select: none;          /* Likely future */   
 }
 
+p.bg-warning{
+  padding: 15px;
+}
 .navbar-brand {
   width: 140px;
 }
