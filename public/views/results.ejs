@@ -1,3 +1,27 @@
 <% layout('../layout') -%>
 <% script('../script/results.js') -%>
 
+<h2>BrandPly Questionnaire results</h2>
+
+<% data.forEach(function(answer) { %>
+<div class="well"> 
+    
+    <dl class="dl-horizontal">
+        <dt>Code Quality</dt>
+        <dd><%= answer.codeQuality %></dd>
+
+        <dt>Best Developer</dt>
+        <dd><%= answer.bestDev %></dd>
+
+        <dt>Suggestions</dt>
+        <dd><%= answer.suggestions %></dd>
+
+        <dt>Length of sprint</dt>
+        <dd><%= answer.lengthOfSprint %></dd>
+
+        <dt>Reply by</dt>
+        <dd><%= answer.name %> </dd>
+    </dl>        
+
+</div>
+<% }); %>

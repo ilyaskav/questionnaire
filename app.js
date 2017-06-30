@@ -33,7 +33,6 @@ app.get('/form', function (request, response) {
 app.post('/submitForm', function (req, res) {
 
   req.checkBody('codeQuality', 'Invalid code quality value').notEmpty().isInt();
-  req.checkBody('bestDev', 'Invalid best dev value').notEmpty().isInt();
   req.checkBody('suggestions', 'Suggestions should not be empty').notEmpty();
   req.checkBody('lengthOfSprint', 'Invalid length Of Sprint value').notEmpty().isInt();
   req.checkBody('name', 'Name is required').notEmpty();
@@ -49,18 +48,23 @@ app.post('/submitForm', function (req, res) {
     //   postparam: req.body.postparam
     // });
     writeAnswer(req.body);
+    res.json({
+      urlparam: req.params.urlparam,
+      getparam: req.query.getparam,
+      postparam: req.body.postparam
+    });
   });
 });
 
 app.get('/results', function (req, res) {
-  var locals = {
-    title: 'Brandply questionnaire: results'
-  };
-  res.render('results', locals);
+
+   readAnswers().then(function(data){
+    res.render('results', {title: 'Brandply questionnaire: results', data: data});
+   }); 
 });
 
 var writeAnswer = function (data) {
-  fs.open('../data/db.txt', 'wx', (err, fd) => {
+  fs.open('public/data/db.txt', 'a', (err, fd) => {
     if (err) {
       if (err.code === 'EEXIST') {
         console.error('myfile already exists');
@@ -68,9 +72,47 @@ var writeAnswer = function (data) {
       }
       throw err;
     }
-    writeMyData(JSON.stringify(fd));
+    fs.appendFile(fd, JSON.stringify(data, null)+ '`', (err) => {
+      if (err) throw err;
+      console.log('The "data to append" was appended to file!');
+      fs.close(fd);
+    });
   });
 };
+
+var readAnswers = function () {
+  var promise = new Promise(function (resolve, reject) {
+
+    fs.open('public/data/db.txt', 'r', (err, fd) => {
+      if (err) {
+        if (err.code === 'ENOENT') {
+          reject('file does not exists');
+        }
+        throw err;
+      }
+      fs.readFile(fd, (err, data) => {
+        if (err) throw err;
+
+        // console.log(data);
+        fs.close(fd);
+        var resultArr = [];
+
+        var strArray = data.toString().split('`');
+        console.log(strArray);
+
+        for (var i=0; i<strArray.length; i++){
+          if (!strArray[i]) continue;
+          resultArr.push(JSON.parse(strArray[i]));
+        }
+        // var strArrayJSON = JSON.parse(strArray);
+        console.log(resultArr);
+        resolve(resultArr);
+      });
+    });
+  });
+return promise;
+};
+
 
 var port = 8080;
 app.listen(port);
