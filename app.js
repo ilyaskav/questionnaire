@@ -5,6 +5,7 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var util = require('util');
+var moment = require('moment');
 var lib = path.join(path.dirname(fs.realpathSync(__filename)), 'public/script/server');
 var fileIO = require(lib + '/file-io.server.js');
 
@@ -19,17 +20,11 @@ app.use(expressValidator()); // this line must be immediately after any of the b
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (request, response) {
-  var locals = {
-    title: 'Brandply questionnaire'
-  };
-  response.render('index', locals);
+  response.render('index', {title: 'Brandply questionnaire'});
 });
 
 app.get('/form', function (request, response) {
-  var locals = {
-    title: 'Brandply questionnaire: answer the questions'
-  };
-  response.render('form', locals);
+  response.render('form', {title: 'Brandply questionnaire: answer the questions'});
 });
 
 app.post('/submitForm', function (req, res) {
@@ -44,6 +39,8 @@ app.post('/submitForm', function (req, res) {
       res.status(400).send('There have been validation errors: ' + util.inspect(result.array()));
       return;
     }
+
+    req.body.date=new Date();
 
     fileIO.writeObj(req.body).then(
       function (result) {
@@ -60,7 +57,17 @@ app.get('/results', function (req, res) {
 
   fileIO.readObj().then(
     function (data) {  // успех
-      res.render('results', { title: 'Brandply questionnaire: results', data: data, error: null });
+
+      data.forEach(function(item, i, data){
+        item.date=moment(item.date).format('MMMM Do YYYY, h:mm:ss a');
+      });
+
+      var locals = {
+        title: 'Brandply questionnaire: results',
+        data: data,
+        error: data.length? null : "No questionnaire answers yet."
+      }
+      res.render('results', locals);
     },
     function (reason) { // отказ  
       res.render('results', { title: 'Brandply questionnaire: results', data: [], error: "No questionnaire answers yet." });

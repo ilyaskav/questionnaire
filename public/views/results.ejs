@@ -8,24 +8,23 @@
 <% } %>
 
 <% data.forEach(function(answer) { %>
-<div class="well"> 
+<div class="answer">
+    <span>Reply by <em><%= answer.name %></em> on <%= answer.date %>:</span>
+    <div class="well"> 
     
-    <dl class="dl-horizontal">
-        <dt>Code Quality</dt>
-        <dd><%= answer.codeQuality %></dd>
+        <dl class="dl-horizontal">
+            <dt>Code Quality</dt>
+            <dd><%= answer.codeQuality %></dd>
 
-        <dt>Best Developer</dt>
-        <dd><%= answer.bestDev %></dd>
+            <dt>Best Developer</dt>
+            <dd><%= answer.bestDev %></dd>
 
-        <dt>Suggestions</dt>
-        <dd><%= answer.suggestions %></dd>
+            <dt>Suggestions</dt>
+            <dd><%= answer.suggestions %></dd>
 
-        <dt>Length of sprint</dt>
-        <dd><%= answer.lengthOfSprint %></dd>
-
-        <dt>Reply by</dt>
-        <dd><%= answer.name %> </dd>
-    </dl>        
-
+            <dt>Length of sprint</dt>
+            <dd><%= answer.lengthOfSprint %></dd>
+        </dl>        
+    </div>
 </div>
 <% }); %>
