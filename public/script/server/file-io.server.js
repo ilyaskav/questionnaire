@@ -3,7 +3,7 @@ var fs = require('fs');
 var writeAnswer = function (data) {
   var promise = new Promise(function (resolve, reject) {
     
-    fs.open('public/data/db.txt', 'a', (err, fd) => {
+    fs.open('data/db.txt', 'a', (err, fd) => {
       if (err) {
         reject("can't open the file");
         return;
@@ -23,7 +23,7 @@ var writeAnswer = function (data) {
 var readAnswers = function () {
   var promise = new Promise(function (resolve, reject) {
 
-    fs.open('public/data/db.txt', 'r', (err, fd) => {
+    fs.open('data/db.txt', 'r', (err, fd) => {
       if (err) {
         if (err.code === 'ENOENT') {
           reject('file does not exists');

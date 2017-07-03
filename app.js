@@ -17,7 +17,7 @@ app.set('view engine', 'ejs');
 // middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator()); // this line must be immediately after any of the bodyParser middlewares! 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static( 'public'));
 
 app.get('/', function (request, response) {
   response.render('index', {title: 'Brandply questionnaire'});
