@@ -4,21 +4,22 @@
 <% script('../script/datatables.js') -%>
 <% stylesheet('../css/dataTables.bootstrap.min.css') -%>
 
+<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-default" id= "addCodeButton">Add Code</button>
+        <button class="btn btn-default" id= "addOrgButton">Add Organization</button>
+    </div>
+
+</div>
+
 <table id="table_id" class="table display">
     <thead>
         <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
+            <th>name</th>
+            <th>email</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
-        </tr>
+        
     </tbody>
 </table>

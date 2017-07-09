@@ -8,6 +8,13 @@ var util = require('util');
 var moment = require('moment');
 var lib = path.join(path.dirname(fs.realpathSync(__filename)), 'public/script/server');
 var fileIO = require(lib + '/file-io.server.js');
+var mongoose = require('mongoose');
+var Hashids = require('hashids');
+var hashids = new Hashids();
+
+var Code = require(lib + '/code-model.server.js');
+var Organization = require(lib + '/organization-model.server.js');
+var connecton = mongoose.connect('mongodb://localhost/test');
 
 var app = express();
 
@@ -79,19 +86,89 @@ app.get('/datatables', function (req, res) {
 });
 
 app.get('/getData', function (req, res) {
-  var data = {
-    "data": [
-      {
-        "user": "ilya",
-        "email": "ilya@gmail.com"
-      },
-      {
-        "user": "Olya",
-        "email": "olya@gmail.com"
-      }]
-  };
+  let limit = parseInt(req.query.length) || 10;
+  let skip = parseInt(req.query.start);
+  let draw = parseInt(req.query.draw);
 
-  res.json(data);
+  Code.aggregate([{
+    $match: { organizations: '59624794a89fbf21bcfd2f0d', status: 'marked' }
+  },
+  {
+    $group: { _id: null, count: { $sum: 1 }, codes: { $push: '$$ROOT' } }
+  },
+  {
+    $project: {
+      codes: { $slice: ['$codes', [skip, limit]] },
+      _id: 0,
+      count: 1
+    }
+  }],
+    function (err, data) {
+      if (err) throw err;
+
+      var data = {
+        data: data
+      };
+
+      data.draw = draw;
+      res.json(data);
+    });
+
+});
+
+app.post('/addCode', function (req, res) {
+  function getRandomIntInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive 
+  }
+
+  let randomCode = 0;
+  let users = ['Ilya', 'Olga', 'John', 'Jack', 'Jill', 'Nick', 'Esh', 'Bill', 'Max', 'Marks', 'Colin', 'Thom', 'Kevin', 'Kate'];
+  let statuses = ['marked', 'reserved', 'used'];
+  let organizations = [];
+
+  Organization.find({}, function (err, data) {
+    if (err) throw err;
+
+    organizations = data;
+
+    for (let i = 0; i < 20000; i++) {
+      randomCode = getRandomIntInt(1000, 99999);
+
+      var newCode = new Code({
+        code: randomCode,
+        hashedCode: hashids.encode(randomCode),
+        fullUserData: {
+          name: users[getRandomIntInt(0, users.length)],
+          campaing: 'Grand openning'
+        },
+        status: statuses[getRandomIntInt(0, statuses.length)],
+        organizations: organizations[getRandomIntInt(0, organizations.length)].id
+      });
+
+      newCode.save(function (err) {
+        if (err) console.error(err);
+        // console.log('code is saved');
+      });
+    }
+
+    res.json({ result: "codes has been added" });
+  });
+
+});
+
+app.post('/addOrg', function (req, res) {
+  var newOrg = new Organization({
+    name: 'SOHO'
+  });
+
+  newOrg.save(function (err) {
+    if (err) console.error(err);
+
+    console.log('org is saved');
+    res.json({ result: "org has been added" });
+  })
 });
 
 var port = 8080;
