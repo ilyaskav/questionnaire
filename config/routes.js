@@ -9,6 +9,7 @@ var moment = require('moment');
 var lib = path.join(path.dirname(fs.realpathSync(__filename)), '../public/script/server');
 var fileIO = require(lib + '/file-io.server.js');
 var logger = require(lib + '/logger.js');
+var exHandler = require(lib + '/exception-handler.js');
 
 module.exports = function (app) {
     app.set('views', path.join(__dirname, '../public/views'));
@@ -19,6 +20,7 @@ module.exports = function (app) {
     app.use(expressValidator()); // this line must be immediately after any of the bodyParser middlewares! 
     app.use(express.static('public'));
     app.use(logger);
+    app.use(app.router);
 
     app.get('/', function (request, response) {
         response.render('index', { title: 'Brandply questionnaire' });
@@ -74,4 +76,10 @@ module.exports = function (app) {
                 res.render('results', { title: 'Brandply questionnaire: results', data: [], error: "No questionnaire answers yet." });
             });
     });
+
+    app.use(function (req, res, next) {
+        res.render('err/404', {title: 'Page was not found'});
+    });
+
+    app.use(exHandler);
 };
