@@ -2,4 +2,9 @@
 
 <h2>500. Error on server</h2>
 <h4>An error was caught while proceding your request. Please try again later. </h4>
+
 <p>If it is not the first time you face this issue <a href="mailto:org@gmail.com">send us an email</a></p>
+
+<%if (error !=undefined) { %>
+    <p>Details: <code><%= error %></code></p>
+<% } %>
