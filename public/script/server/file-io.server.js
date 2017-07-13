@@ -1,14 +1,15 @@
 var fs = require('fs');
 
-var writeAnswer = function (data) {
+var writeAnswer = function (data, filename, separator) {
+  separator = separator || '`';
   var promise = new Promise(function (resolve, reject) {
     
-    fs.open('data/db.txt', 'a', (err, fd) => {
+    fs.open('data/'+filename, 'a', (err, fd) => {
       if (err) {
         reject("can't open the file");
         return;
       }
-      fs.appendFile(fd, JSON.stringify(data, null) + '`', (err) => {
+      fs.appendFile(fd, JSON.stringify(data, null) + separator, (err) => {
         if (err) {
           reject("can't append to a file");
         }
