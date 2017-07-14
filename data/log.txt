@@ -1,1 +1,4 @@
-{"datetime":"2017-07-13T21:06:47.768Z","ip":"::1","method":"GET","url":"/results"}{"datetime":"2017-07-13T21:06:49.944Z","ip":"::1","method":"GET","url":"/form"}{"datetime":"2017-07-13T21:06:51.599Z","ip":"::1","method":"GET","url":"/"}{"datetime":"2017-07-13T21:06:52.320Z","ip":"::1","method":"GET","url":"/"}
+{"datetime":"2017-07-13T21:06:47.768Z","ip":"::1","method":"GET","url":"/results"}
+{"datetime":"2017-07-13T21:06:49.944Z","ip":"::1","method":"GET","url":"/form"}
+{"datetime":"2017-07-13T21:06:51.599Z","ip":"::1","method":"GET","url":"/"}
+{"datetime":"2017-07-13T21:06:52.320Z","ip":"::1","method":"GET","url":"/"}

@@ -3,7 +3,7 @@ var util = require('util');
 var fileIO = require( './file-io.server.js');
 
 
-module.exports = (req, res ) => {
+module.exports = (req, res, next ) => {
 
     req.checkBody('codeQuality', 'Invalid code quality value').notEmpty().isInt();
     req.checkBody('suggestions', 'Suggestions should not be empty').notEmpty();

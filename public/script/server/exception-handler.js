@@ -1,7 +1,8 @@
 
 module.exports = function ajaxHandler(err, req, res, next) {
     if (req.xhr) {
-        res.status(500).send({ error: err });
+        let error = err || new Error('Error occured during your request');
+        res.status(500).send({ error });
     } 
 
     if (res.headersSent) {
