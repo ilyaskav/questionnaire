@@ -2,7 +2,7 @@
     width: 970px;
 }
 
-textarea, select, input {
+textarea, select, input, div.alert {
   max-width: 400px;
 }
 
