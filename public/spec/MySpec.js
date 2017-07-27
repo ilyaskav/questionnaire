@@ -78,7 +78,7 @@ describe('Effectifity Calc alert output', () => {
   });
 
   it('should show message "High sprint quality" for question rating = average Sprint Quality', () => {
-    let questionRating = averageSprintQuality +1,
+    let questionRating = averageSprintQuality + 1,
       expectedRes = 'High sprint quality';
 
     showSprintStatus(questionRating, '#' + containerId);
