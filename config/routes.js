@@ -19,6 +19,7 @@ module.exports = function (app) {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(expressValidator()); // this line must be immediately after any of the bodyParser middlewares! 
     app.use(express.static('public'));
+    // app.use(express.static('jasmine'));
     app.use(logger);
 
 
@@ -34,6 +35,9 @@ module.exports = function (app) {
 
     app.get('/results', viewResult);
 
+    app.get('/tests', function(req, res){
+        res.sendFile(path.resolve('public/SpecRunner.html'));
+    });
 
     app.use(function (req, res, next) {
         res.render('err/404', {title: 'Page was not found'});

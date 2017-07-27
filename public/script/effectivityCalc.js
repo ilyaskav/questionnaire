@@ -3,14 +3,20 @@ var devKPI = {
     'Eugene Novikov': 0.92,
 };
 
-var mediumSprintQuality = 50;
+var averageSprintQuality = 50;
 
 var getKPI = function(devName) {
-    return devKPI.hasOwnProperty(devName) ? devKPI[devName] : undefined;
+    if (devKPI.hasOwnProperty(devName))
+        return devKPI[devName];
+    else
+        throw new Error("user was not found");
 };
 
-var getSprintCodeQuaility =  function (codeQuality, lengthOfSprint) {
-    return codeQuality / lengthOfSprint;
+var getSprintCodeQuaility = function(codeQuality, lengthOfSprint) {
+    if (lengthOfSprint > 0)
+        return codeQuality / lengthOfSprint;
+    else
+        throw new Error("length of sprint should be positive");
 };
 
 var getQuestionRating = function(sprintCodeQuality, KPI) {
@@ -22,13 +28,13 @@ var showSprintStatus = function(questionRating, selector) {
     var html = '<label> Sprint status </label>';
 
     switch (true) {
-        case questionRating < mediumSprintQuality:
-            html += '<div class="alert alert-danger"> Bad sprint quality </div>';
+        case questionRating < averageSprintQuality:
+            html += '<div class="alert alert-danger"> Low sprint quality </div>';
             break;
-        case questionRating == mediumSprintQuality:
+        case questionRating == averageSprintQuality:
             html += '<div class="alert alert-info"> Medium sprint quality </div>';
             break;
-        case questionRating > mediumSprintQuality:
+        case questionRating > averageSprintQuality:
             html += '<div class="alert alert-success"> High sprint quality </div>';
             break;
     }
